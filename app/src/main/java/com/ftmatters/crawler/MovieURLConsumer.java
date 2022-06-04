@@ -5,6 +5,6 @@ package com.ftmatters.crawler;
  *
  * A MovieConsumer gets the URL of a movie, parses it and returns a Movie.
  */
-public interface MovieConsumer {
-    public Movie consumeMovieURL(String movieURL);
+public interface MovieURLConsumer {
+    Movie consumeMovieURL(String movieURL);
 }

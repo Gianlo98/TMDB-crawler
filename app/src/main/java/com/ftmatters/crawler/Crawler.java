@@ -1,18 +1,22 @@
 package com.ftmatters.crawler;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import com.ftmatters.crawler.consumer.TMDBMovieConsumer;
+import com.ftmatters.crawler.provider.PopularMovieProvider;
+
+import java.util.concurrent.*;
 
 public class Crawler {
 
-    public String getGreeting() {
-        return "Hello World!";
-    }
+    private static int requestsPerSecond = 1;
 
     public static void main(String[] args) {
-
-//        BlockingQueue<Integer> unboundedQueue = new LinkedBlockingQueue<>();
-
-        System.out.println(new Crawler().getGreeting());
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(3);
+        MovieURLProvider movieURLProvider = new PopularMovieProvider();
+        MovieURLConsumer movieURLConsumer = new TMDBMovieConsumer();
+        scheduler.scheduleAtFixedRate(() -> {
+            String movieURL = movieURLProvider.provideMovieURL();
+            Movie movie = movieURLConsumer.consumeMovieURL(movieURL);
+            MovieDB.getInstance().insertMovie(movie);
+        }, 0, 1000 / requestsPerSecond, TimeUnit.MILLISECONDS);
     }
 }
