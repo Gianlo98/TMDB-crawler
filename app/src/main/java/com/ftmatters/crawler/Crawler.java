@@ -10,6 +10,17 @@ public class Crawler {
     private static int requestsPerSecond = 1;
 
     public static void main(String[] args) {
+
+        if (System.getenv("CRAWL_RATIO") != null) {
+            try {
+                requestsPerSecond = Integer.parseInt(System.getenv("CRAWL_RATIO"));
+            } catch (NumberFormatException exception) {
+                System.err.println("Invalid value of CRAWL_RATIO");
+            }
+        }
+
+        System.out.println("Starting the crawler with a speed ratio of " + requestsPerSecond + " requests per second.");
+
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(3);
         MovieURLProvider movieURLProvider = new PopularMovieProvider();
         MovieURLConsumer movieURLConsumer = new TMDBMovieConsumer();

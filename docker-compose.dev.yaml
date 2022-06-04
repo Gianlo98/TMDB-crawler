@@ -1,0 +1,7 @@
+services:
+  crawler:
+    build: app/
+    volumes:
+      - .:/app/db
+    environment:
+      - CRAWL_RATIO=1

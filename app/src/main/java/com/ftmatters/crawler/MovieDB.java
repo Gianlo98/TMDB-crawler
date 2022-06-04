@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class MovieDB {
 
-    private final String DB_CONNECTION = "jdbc:sqlite:crawler.db";
+    private final String DB_CONNECTION = "jdbc:sqlite:db/crawler.db";
     private static final MovieDB INSTANCE = new MovieDB();
     private PreparedStatement preparedInsert;
 

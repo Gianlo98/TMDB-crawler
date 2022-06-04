@@ -1,0 +1,5 @@
+services:
+  crawler:
+    build: app/
+    environment:
+      - CRAWL_RATIO=2
