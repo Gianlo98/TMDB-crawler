@@ -1,9 +1,12 @@
 package com.ftmatters.crawler;
 
 import com.ftmatters.crawler.consumer.TMDBMovieConsumer;
+import com.ftmatters.crawler.provider.NoAvailableMovieException;
 import com.ftmatters.crawler.provider.PopularMovieProvider;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Crawler {
 
@@ -19,15 +22,31 @@ public class Crawler {
             }
         }
 
-        System.out.println("Starting the crawler with a speed ratio of " + requestsPerSecond + " requests per second.");
+        System.out.println("CRAWL_RATIO: " + requestsPerSecond);
 
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(3);
-        MovieURLProvider movieURLProvider = new PopularMovieProvider();
-        MovieURLConsumer movieURLConsumer = new TMDBMovieConsumer();
-        scheduler.scheduleAtFixedRate(() -> {
-            String movieURL = movieURLProvider.provideMovieURL();
-            Movie movie = movieURLConsumer.consumeMovieURL(movieURL);
-            MovieDB.getInstance().insertMovie(movie);
-        }, 0, 1000 / requestsPerSecond, TimeUnit.MILLISECONDS);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(requestsPerSecond);
+        try {
+            MovieURLProvider movieURLProvider = new PopularMovieProvider();
+
+            MovieURLConsumer movieURLConsumer = new TMDBMovieConsumer();
+            MovieDB movieDB = MovieDB.getInstance();
+
+            scheduler.scheduleAtFixedRate(() -> {
+                try {
+                    String movieURL = movieURLProvider.provideMovieURL();
+                    if (movieURL != null) {
+                        Movie movie = movieURLConsumer.consumeMovieURL(movieURL);
+                        movieDB.insertMovie(movie);
+                    }
+                } catch (NoAvailableMovieException e) {
+                    System.out.println("There aren't any available movies");
+                    System.exit(0);
+                }
+            }, 0, 1000 / requestsPerSecond, TimeUnit.MILLISECONDS);
+
+        } catch (NoAvailableMovieException e) {
+            System.out.println("There aren't any available movies");
+            System.exit(1);
+        }
     }
 }

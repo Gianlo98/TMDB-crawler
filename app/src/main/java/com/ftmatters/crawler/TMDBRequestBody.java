@@ -3,8 +3,14 @@ package com.ftmatters.crawler;
 import lombok.Builder;
 import lombok.Setter;
 
+
+/**
+ * BUILDER pattern
+ *
+ * The TMDBRequestBody is a data class which holds all the required fields to make a request at TMDB
+ */
 @Setter @Builder
-public class TMDBRequestBodyBuilder {
+public class TMDBRequestBody {
     @Builder.Default public String airDateGTE = "";
     @Builder.Default public String airDateLTE = "2022-12-03";
     @Builder.Default public String certification = "";
@@ -34,6 +40,10 @@ public class TMDBRequestBodyBuilder {
     @Builder.Default public String withRuntimeGTE = "0";
     @Builder.Default public String withRuntimeLTE = "400";
 
+    /**
+     * Returns a string representing the x-www-form-urlencoded body of the request
+     * @return the encoded body of the request
+     */
     public String getRequestBody() {
         return  String.format("air_date.gte=%s" +
                 "&air_date.lte=%s" +

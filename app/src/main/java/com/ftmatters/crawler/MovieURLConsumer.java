@@ -3,7 +3,7 @@ package com.ftmatters.crawler;
 /**
  * PRODUCER/CONSUMER PATTERN
  *
- * A MovieConsumer gets the URL of a movie, parses it and returns a Movie.
+ * A MovieURLConsumer gets the URL of a movie, parses it and returns a Movie.
  */
 public interface MovieURLConsumer {
     Movie consumeMovieURL(String movieURL);

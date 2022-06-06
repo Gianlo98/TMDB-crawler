@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class MovieProviderTest {
 
     @Test
-    void testPopularMovieProvider() {
+    void testPopularMovieProvider() throws NoAvailableMovieException {
         PopularMovieProvider popularMovieProvider = new PopularMovieProvider();
         for (int i = 0; i < 100; i++) {
             String movieURL = popularMovieProvider.provideMovieURL();

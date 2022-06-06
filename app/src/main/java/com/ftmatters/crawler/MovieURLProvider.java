@@ -1,9 +1,11 @@
 package com.ftmatters.crawler;
 
+import com.ftmatters.crawler.provider.NoAvailableMovieException;
+
 /**
  * PRODUCER/CONSUMER PATTERN
  *
- * A movie Provider provides movie's URL.
+ * A MovieURLProvider provides movie's URL.
  */
 public interface MovieURLProvider {
 
@@ -12,5 +14,5 @@ public interface MovieURLProvider {
      * Ideally, it should ensure that the URL wasn't returned yet before.
      * @return A String that contains the URL of a movie.
      */
-    public String provideMovieURL();
+    public String provideMovieURL() throws NoAvailableMovieException;
 }
